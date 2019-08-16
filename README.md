@@ -92,8 +92,10 @@
     * `Quote(String text)`
     * `Quote(String author, String text)`
   * Methods:
+    * `public String setString()`
+      * returns a formatted string
     * `public String toString()`
-      * returns a string with the quote and author
+      * returns `setString()`
 
 * **StarWarsQuote extends Quotable**
   * Variables:
@@ -101,7 +103,9 @@
   * Constructor:
     * `StarWarsQuote(String starWarsQuote)`
   * Methods:
+    * `public String setString()`
+      * returns a formatted string
     * `public String toString()`
-      * returns a string with the quote
+      * returns `setString()`
   
 **[Back to Top](#top)**
