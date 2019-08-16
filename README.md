@@ -40,8 +40,8 @@
 **Interface**
 * **Quotable**
   * Methods:
-    * String setString();
-    * String toString();
+    * `String setString()`
+    * `String toString()`
 
 **Classes**
 * **App**
