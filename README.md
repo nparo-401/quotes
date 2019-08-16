@@ -7,12 +7,12 @@
 * [Methods](#methods)
 
 <a name="team"></a>
-#### Team:
+### Team:
 * Nicholas Paro
 * Sapana Poudel
 
 <a name="resources"></a>
-#### Resources:
+### Resources:
 * Bomi Bear
 * Melfi Perez
 * Travis Cox
@@ -24,7 +24,7 @@
 * [Add Data to JsonObject](https://stackoverflow.com/questions/11143363/add-data-to-jsonobject)
 
 <a name="files"></a>
-#### Files:
+### Files:
 * quotes
   * src/main 
     * [App.java](./src/main/java/quotes/App.java)
@@ -36,7 +36,7 @@
     * [ParserTest.java](./src/test/java/quotes/ParserTest.java)
 
 <a name="methods"></a>
-#### Methods:
+### Methods:
 **Interface**
 * **Quotable**
   * Methods:
