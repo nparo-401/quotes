@@ -1,29 +1,24 @@
 package quotes;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
+import java.net.*;
 
 class Parser {
   public String inputReader(){
     Gson gson = new Gson();
-    String parsedQuotes = jsonReader(gson);
-    String swQ = urlReader(gson);
-
-    System.out.println(parsedQuotes);
-    System.out.println(swQ);
-    return parsedQuotes;
+    return urlReader(gson);
   }
 
   public String urlReader(Gson gson) {
+    Quotable quote;
+    String response;
     try {
       URL url = new URL("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote");
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-
+      connection.setConnectTimeout(5000);
       BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       String inputLine;
       StringBuilder content = new StringBuilder();
@@ -31,37 +26,66 @@ class Parser {
         content.append(inputLine);
       }
       in.close();
-      Quotable starWarsQuote = gson.fromJson(content.toString(), StarWarsQuote.class);
-      return printQuote(starWarsQuote);
+      addToJson(content.toString());
+      quote = gson.fromJson(content.toString(), StarWarsQuote.class);
+      response = printQuote(quote);
     } catch (IOException e) {
-      e.printStackTrace();
+      response = jsonReader(gson);
     }
-    return null;
+    return response;
   }
 
   public String jsonReader(Gson gson) {
+    String response = "";
     try {
       Quotable[] quote = gson.fromJson(
           new FileReader("./src/main/resources/recentquotes.json"),
           Quote[].class
       );
-      return printQuote(quote);
+      response = printQuote(quote);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    return null;
+    return response;
+  }
+
+  private void addToJson(String jsonString) {
+    JsonArray recentQuote = addQuote(jsonString);
+    try {
+      BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/recentquotes.json"));
+      writer.write(recentQuote.toString());
+      writer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private JsonArray addQuote(String jsonString) {
+    JsonArray recentQuote = new JsonArray();
+    try {
+      Gson gson = new Gson();
+      JsonObject inputObj = gson.fromJson(jsonString, JsonObject.class);
+      JsonObject updatedObj = new JsonObject();
+      updatedObj.add("text", inputObj.get("starWarsQuote"));
+
+      recentQuote = gson.fromJson(new FileReader("./src/main/resources/recentquotes.json"), JsonArray.class);
+      recentQuote.add(updatedObj);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return recentQuote;
   }
 
   public int randomNum(Quotable[] quotes) {
-    System.out.println(quotes.length);
     return (int) (Math.random() * quotes.length);
   }
 
-  public String printQuote(Quotable[] quotes) {
-    return quotes[randomNum(quotes)].toString();
+  private String printQuote(Quotable[] quotes) {
+    Quotable quote = quotes[randomNum(quotes)];
+    return quote.toString();
   }
 
-  public String printQuote(Quotable quote) {
+  private String printQuote(Quotable quote) {
     return quote.toString();
   }
 }

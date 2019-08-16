@@ -3,6 +3,6 @@ package quotes;
 public class App {
     public static void main(String[] args){
         Parser parser = new Parser();
-        parser.inputReader();
+        System.out.println(parser.inputReader());
     }
 }
